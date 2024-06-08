@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
 namespace APBD8.Models;
 
-public partial class Client
-{
-    public int IdClient { get;  set; }
-
+public class AddClientToTrip {
     public string FirstName { get; set; } = null!;
 
     public string LastName { get; set; } = null!;
@@ -16,6 +10,12 @@ public partial class Client
     public string Telephone { get; set; } = null!;
 
     public string Pesel { get; set; } = null!;
+    
+    public int IdTrip { get; set; }
+    
+    public string TripName { get; set; } = null!;
+    
+    public DateTime? PaymentDate { get; set; }
 
-    public virtual ICollection<ClientTrip> ClientTrips { get; set; } = new List<ClientTrip>();
+
 }
