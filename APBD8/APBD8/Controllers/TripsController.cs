@@ -1,6 +1,8 @@
 using APBD8.Context;
 using APBD8.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace APBD8.Controllers;
 
@@ -112,21 +114,33 @@ public class TripsController : ControllerBase {
         if (alreadyAddedToTrip)
             return BadRequest("A client with given PESEL is already a part of given trip");
 
-        var newClient= dbContext.Clients.Add(new Client() {
-            FirstName = clientToAdd.FirstName,
-            LastName = clientToAdd.LastName,
-            Email = clientToAdd.Email,
-            Telephone = clientToAdd.Telephone,
-            Pesel = clientToAdd.Pesel
-        });
-        dbContext.ClientTrips.Add(new ClientTrip() {
-            IdClient = newClient.Entity.IdClient,
-            IdTrip = clientToAdd.IdTrip,
-            PaymentDate = clientToAdd.PaymentDate,
-            RegisteredAt = DateTime.Now
-        });
-        dbContext.SaveChanges();
+        using (var transaction = dbContext.Database.BeginTransaction()) {
+            try {
+                var newClient = new Client {
+                    FirstName = clientToAdd.FirstName,
+                    LastName = clientToAdd.LastName,
+                    Email = clientToAdd.Email,
+                    Telephone = clientToAdd.Telephone,
+                    Pesel = clientToAdd.Pesel
+                };
 
-        return Ok();
+                dbContext.Clients.Add(newClient);
+                dbContext.SaveChanges();  
+
+                dbContext.ClientTrips.Add(new ClientTrip {
+                    IdClient = newClient.IdClient,
+                    IdTrip = clientToAdd.IdTrip,
+                    PaymentDate = clientToAdd.PaymentDate,
+                    RegisteredAt = DateTime.Now
+                });
+
+                dbContext.SaveChanges();
+                transaction.Commit();
+                return StatusCode(201,"new client with id created:" + newClient.IdClient);
+            } catch (Exception ex) {
+                transaction.Rollback(); 
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

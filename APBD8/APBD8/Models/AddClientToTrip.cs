@@ -10,12 +10,10 @@ public class AddClientToTrip {
     public string Telephone { get; set; } = null!;
 
     public string Pesel { get; set; } = null!;
-    
+
     public int IdTrip { get; set; }
-    
+
     public string TripName { get; set; } = null!;
-    
+
     public DateTime? PaymentDate { get; set; }
-
-
 }
