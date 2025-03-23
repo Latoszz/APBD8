@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APBD8", "APBD8\APBD8.csproj", "{0178951E-D277-4CF1-8F1D-8399A17C08DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripsController", "TripsController\TripsController.csproj", "{0178951E-D277-4CF1-8F1D-8399A17C08DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

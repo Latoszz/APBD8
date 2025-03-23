@@ -1,4 +1,6 @@
 using APBD8.Context;
+using APBD8.Repositories;
+using APBD8.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +12,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+builder.Services.AddScoped<ITripService, TripService>();
+builder.Services.AddScoped<IClientService, ClientService>();
+
+builder.Services.AddScoped<ITripRepository, TripRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddDbContext<Apbd8Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddControllers()
